@@ -12,7 +12,6 @@ DRIVING_SPEED = 100
 TURNING_SPEED = 100
 STOP_DISTANCE = 25
 
-
 def stop_robot(duration):
 
     iterations = int(duration * 10)
@@ -34,7 +33,7 @@ def drive_robot(direction, duration):
 
 
 
-def turn_robot_90_angle(direction):
+def turn_robot_90_angle(direction): #90turn
 
     iterations = (16)
     
@@ -43,12 +42,10 @@ def turn_robot_90_angle(direction):
         time.sleep(0.10)
 
 
-#turn_right = turn_robot_90_angle(1, 1)
-#turn_left = turn_robot_90_angle(1, -1)
 
 
 execution_frequency = 10 
-execution_period = 1. / execution_frequency 
+execution_period = 1. / execution_frequency
 
 
 motor_serial = imrt_robot_serial.IMRTRobotSerial()
@@ -60,46 +57,43 @@ except:
     print("Could not open port. Is your robot connected?\nExiting program")
     sys.exit()
 
-  
+    
 motor_serial.run()
-
 
 print("Entering loop. Ctrl+c to terminate")
 while not motor_serial.shutdown_now :
-  
-  dist_1 = motor_serial.get_dist_1()
-  dist_2 = motor_serial.get_dist_2()
-  print("Dist 1:", dist_1, "   Dist 2:", dist_2)
 
 
- if dist_1 < STOP_DISTANCE or dist_2 < STOP_DISTANCE:
-    print("Oh shit!")
-    stop_robot(1)
 
-    drive_robot(BACKWARDS, 0.5)
+
+
+#most below 90 system check
+
     
-    turn_robot_90_angle(1)
-    
-    drive_robot(FORWARDS, 0.5)
-    
+    dist_1 = motor_serial.get_dist_1()
+    dist_2 = motor_serial.get_dist_2()
+    print("Dist 1:", dist_1, "   Dist 2:", dist_2)
+
     if dist_1 < STOP_DISTANCE or dist_2 < STOP_DISTANCE:
-      stop_robot(1)
+       print("Oh shit!")
+       stop_robot(1)
+       drive_robot(BACKWARDS, 0.5)
+       turn_robot_90_angle(1)
+       drive_robot(FORWARDS, 0.5)
+       
+       if dist_1 < STOP_DISTANCE or dist_2 < STOP_DISTANCE:
+         stop_robot(1)
+         drive_robot(BACKWARDS, 0.5)
+         turn_robot_90_angle(1)
+         turn_robot_90_angle(1)
+         drive_robot(FORWARDS, 0.5)
+         
+         if dist_1 < STOP_DISTANCE or dist_2 < STOP_DISTANCE:
+           stop_robot(1)
+           drive_robot(BACKWARDS, 0.5)
+           turn_robot_90_angle(-1)
+    else:
+      drive_robot(FORWARDS, 0.1)
 
-      drive_robot(BACKWARDS, 0.5)
-    
-      turn_robot_90_angle(1)
-      
-      turn_robot_90_angle(1)
-    
-      drive_robot(FORWARDS, 0.5)
-      
-      if dist_1 < STOP_DISTANCE or dist_2 < STOP_DISTANCE:
-        stop_robot(1)
 
-        drive_robot(BACKWARDS, 0.5)
-    
-        turn_robot_90_angle(-1)
-  
-
- else:
-  drive_robot(FORWARDS, 0.1)
+print("Goodbye")
