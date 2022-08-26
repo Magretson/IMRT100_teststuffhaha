@@ -35,7 +35,7 @@ def drive_robot(direction, duration):
 
 def turn_robot_90_angle(direction): #90turn
 
-    iterations = (16)
+    iterations = (20)
     
     for i in range(iterations):
         motor_serial.send_command(TURNING_SPEED * direction, -TURNING_SPEED * direction)
