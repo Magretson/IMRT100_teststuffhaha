@@ -39,7 +39,7 @@ def drive_robot(direction, duration):
 def correct_robot_right():  #ADD works and right direction
 
     direction = 1
-    iterations = randint(5)
+    iterations = 5
     
     for i in range(iterations):
         motor_serial.send_command(CORRECTING_SPEED * 1, TURNING_SPEED * 1)
@@ -48,7 +48,7 @@ def correct_robot_right():  #ADD works and right direction
 def correct_robot_left():  ##ADD works and right direction
 
     direction = 1
-    iterations = randint(5)
+    iterations = 5
     
     for i in range(iterations):
         motor_serial.send_command(TURNING_SPEED * 1, CORRECTING_SPEED * 1)
