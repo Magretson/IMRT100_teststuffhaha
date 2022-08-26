@@ -10,9 +10,9 @@ FORWARDS = 1
 BACKWARDS = -1
 DRIVING_SPEED = 100
 TURNING_SPEED = 100
-CORRECTING_SPEED = 110 #new one
+CORRECTING_SPEED = 150 #ADD (150 good speed)
 STOP_DISTANCE = 25
-CORRECT_DISTANCE = 20
+CORRECT_DISTANCE = 20 #ADD (recheck once turn code added in, might be too low?)
 
 
 def stop_robot(duration):
@@ -36,7 +36,7 @@ def drive_robot(direction, duration):
 
 
 
-def correct_robot_right():  #Code to test
+def correct_robot_right():  #ADD works and right direction
 
     direction = 1
     iterations = randint(5)
@@ -45,7 +45,7 @@ def correct_robot_right():  #Code to test
         motor_serial.send_command(CORRECTING_SPEED * 1, TURNING_SPEED * 1)
         time.sleep(0.10)
         
-def correct_robot_left():  #Code to test nr.2
+def correct_robot_left():  ##ADD works and right direction
 
     direction = 1
     iterations = randint(5)
@@ -78,12 +78,12 @@ while not motor_serial.shutdown_now :
 
 
 
-    # Get and print readings from distance sensors
+    # REMEMBER TO ADD TURN dist_1 AND dist_2
     dist_3 = motor_serial.get_dist_3()
     dist_4 = motor_serial.get_dist_4()
     print("Dist 3:", dist_3, "   Dist 4:", dist_4)
 
-    # v1 correcting code
+    # ADD v1 vgood, find a way to intergrate
     if dist_3 < CORRECT_DISTANCE or dist_4 < CORRECT_DISTANCE:
       drive_robot(FORWARDS, 0.1)
       
