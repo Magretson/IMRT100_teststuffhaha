@@ -13,7 +13,7 @@ TURNING_SPEED = 100
 CORRECTING_SPEED = 150 #ADD (150 good speed)
 STOP_DISTANCE = 25 #Original 25
 CORRECT_DISTANCE = 20 #ADD (recheck once turn code added in, might be too low?)
-TURN_DISTANCE = 35 #Change if too low
+TURN_DISTANCE = 110 #Change if too low
 
 def stop_robot(duration):
 
@@ -95,7 +95,7 @@ while not motor_serial.shutdown_now :
     dist_2 = motor_serial.get_dist_2()
     dist_3 = motor_serial.get_dist_3()
     dist_4 = motor_serial.get_dist_4()
-    print("Dist 1:", dist_1, "   Dist 2:", dist_2)
+    print("Dist 1:", dist_1, "   Dist 2:", dist_2, "   Dist 3:", dist_3, "   Dist 4:", dist_4)
 
     if dist_1 < STOP_DISTANCE or dist_2 < STOP_DISTANCE: #Robot wallstop
        print("Oh shit!")
@@ -120,7 +120,7 @@ while not motor_serial.shutdown_now :
            drive_robot(BACKWARDS, 0.5)
            turn_robot_90_angle(-1)
     
-    elif dist_1 and dist_3 > TURN_DISTANCE or dist_2 and dist_4 > TURN_DISTANCE: #Robot turn
+    elif dist_1 and dist_3 > TURN_DISTANCE or dist_2 and dist_4 > TURN_DISTANCE: #Robot turn, sensors not opt for this type of turn
       drive_robot(FORWARDS, 0.1)
       
       if dist_2 and dist_4 > TURN_DISTANCE:
