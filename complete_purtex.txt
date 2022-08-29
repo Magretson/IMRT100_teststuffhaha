@@ -125,10 +125,16 @@ while not motor_serial.shutdown_now :
       
       if dist_2 and dist_4 > TURN_DISTANCE:
         drive_robot(FORWARDS, 6.5)
+        dist_2 = motor_serial.get_dist_2()
+        dist_4 = motor_serial.get_dist_4()
+        if dist_4 > dist_3
         turn_robot_90_angle(1)
       
       elif dist_1 and dist_3 > TURN_DISTANCE:
         drive_robot(FORWARDS, 6.5)
+        dist_1 = motor_serial.get_dist_1()
+        dist_3 = motor_serial.get_dist_3()
+        if dist_3 > dist_4
         turn_robot_90_angle(-1)
            
     elif dist_3 < CORRECT_DISTANCE or dist_4 < CORRECT_DISTANCE: #robot correct
