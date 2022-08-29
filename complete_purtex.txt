@@ -11,8 +11,9 @@ BACKWARDS = -1
 DRIVING_SPEED = 100
 TURNING_SPEED = 100
 CORRECTING_SPEED = 150 #ADD (150 good speed)
-STOP_DISTANCE = 25
+STOP_DISTANCE = 25 #Original 25
 CORRECT_DISTANCE = 20 #ADD (recheck once turn code added in, might be too low?)
+TURN_DISTANCE = 35 #Change if too low
 
 def stop_robot(duration):
 
@@ -35,9 +36,9 @@ def drive_robot(direction, duration):
 
 
 
-def turn_robot_90_angle(direction): #90turn
+def turn_robot_90_angle(direction): #90turn, 20 for low batterie
 
-    iterations = (20)
+    iterations = (19)
     
     for i in range(iterations):
         motor_serial.send_command(TURNING_SPEED * direction, -TURNING_SPEED * direction)
@@ -96,7 +97,7 @@ while not motor_serial.shutdown_now :
     dist_4 = motor_serial.get_dist_4()
     print("Dist 1:", dist_1, "   Dist 2:", dist_2)
 
-    if dist_1 < STOP_DISTANCE or dist_2 < STOP_DISTANCE:
+    if dist_1 < STOP_DISTANCE or dist_2 < STOP_DISTANCE: #Robot wallstop
        print("Oh shit!")
        stop_robot(1)
        drive_robot(BACKWARDS, 0.5)
@@ -118,8 +119,19 @@ while not motor_serial.shutdown_now :
            stop_robot(1)
            drive_robot(BACKWARDS, 0.5)
            turn_robot_90_angle(-1)
+    
+    elif dist_1 and dist_3 > TURN_DISTANCE or dist_2 and dist_4 > TURN_DISTANCE: #Robot turn
+      drive_robot(FORWARDS, 0.1)
+      
+      if dist_2 and dist_4 > TURN_DISTANCE:
+        drive_robot(FORWARDS, 6.5)
+        turn_robot_90_angle(1)
+      
+      elif dist_1 and dist_3 > TURN_DISTANCE:
+        drive_robot(FORWARDS, 6.5)
+        turn_robot_90_angle(-1)
            
-    elif dist_3 < CORRECT_DISTANCE or dist_4 < CORRECT_DISTANCE:
+    elif dist_3 < CORRECT_DISTANCE or dist_4 < CORRECT_DISTANCE: #robot correct
       drive_robot(FORWARDS, 0.1)
       
       if dist_3 < CORRECT_DISTANCE:
