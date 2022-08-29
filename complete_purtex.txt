@@ -129,11 +129,10 @@ while not motor_serial.shutdown_now :
            turn_robot_90_angle(-1)
     
     elif dist_2 and dist_4 > TURN_DISTANCE: #Robot turn, sensors not opt for this type of turn
-      drive_robot(FORWARDS, 0.1)
-      
-      if dist_2 and dist_4 > TURN_DISTANCE:
-        correct_robot_hard(1)
-      
+      correct_robot_hard(1)
+      dist_2 = motor_serial.get_dist_2()
+      dist_4 = motor_serial.get_dist_4()
+           
            
     elif dist_3 < CORRECT_DISTANCE or dist_4 < CORRECT_DISTANCE: #robot correct
       drive_robot(FORWARDS, 0.1)
