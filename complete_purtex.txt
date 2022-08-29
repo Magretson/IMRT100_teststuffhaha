@@ -61,17 +61,7 @@ def correct_robot_hard(direction):  #ADD works and right direction
     for i in range(iterations):
         motor_serial.send_command(HARD_SPEED * 1, TURNING_SPEED * 1)
         time.sleep(0.10)
-        
-def correct_robot_left():  #ADD works and right direction
-
-    direction = 1
-    iterations = 5
-    
-    for i in range(iterations):
-        motor_serial.send_command(TURNING_SPEED * 1, CORRECTING_SPEED * 1)
-        time.sleep(0.10)
-
-
+       
 
 execution_frequency = 10 
 execution_period = 1. / execution_frequency
@@ -127,23 +117,27 @@ while not motor_serial.shutdown_now :
            stop_robot(1)
            drive_robot(BACKWARDS, 0.5)
            turn_robot_90_angle(-1)
-    
-    elif dist_2 and dist_4 > TURN_DISTANCE: #Robot turn, sensors not opt for this type of turn
-      correct_robot_hard(1)
-      dist_2 = motor_serial.get_dist_2()
-      dist_4 = motor_serial.get_dist_4()
-           
+        
            
     elif dist_3 < CORRECT_DISTANCE or dist_4 < CORRECT_DISTANCE: #robot correct
       drive_robot(FORWARDS, 0.1)
       
       if dist_3 < CORRECT_DISTANCE:
-        correct_robot_(1)
+        correct_robot(1)
       
       elif dist_4 < CORRECT_DISTANCE:
-        correct_robot_(-1)
+        correct_robot(-1)
+        
     else:
       drive_robot(FORWARDS, 0.1)
+      
+     
+if dist_2 and dist_4 > TURN_DISTANCE: #hard right turn
+        correct_robot_hard(1)
+        dist_2 = motor_serial.get_dist_2()
+        dist_4 = motor_serial.get_dist_4()
+else:
+    drive_robot(FORWARDS, 0.1)
 
 
 print("Goodbye")
