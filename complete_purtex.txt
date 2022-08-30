@@ -13,7 +13,8 @@ TURNING_SPEED = 100
 HARD_SPEED = 200
 CORRECTING_SPEED = 150 #ADD (150 good speed)
 STOP_DISTANCE = 15 #Original 25
-CORRECT_DISTANCE = 20 #ADD (recheck once turn code added in, might be too low?)
+CORRECT_DISTANCE = 25 #ADD (recheck once turn code added in, might be too low?)
+CRASH_DISTANCE = 15 #For hard correcting
 TURN_DISTANCE = 80 #Change if too low
 
 def stop_robot(duration):
@@ -64,7 +65,26 @@ def correct_robot_left():  #ADD works and right direction
         motor_serial.send_command(TURNING_SPEED * 1, CORRECTING_SPEED * 1)
         time.sleep(0.10)
         
-def correct_robot_hard(direction):  #ADD works and right direction
+def correct_robot_right():  #HARD correct right
+
+    direction = 1
+    iterations = 2
+    
+    for i in range(iterations):
+        motor_serial.send_command(HARD_SPEED * 1, TURNING_SPEED * 1)
+        time.sleep(0.10)
+
+def correct_robot_left():  #HARD correct left
+
+    direction = 1
+    iterations = 2
+    
+    for i in range(iterations):
+        motor_serial.send_command(TURNING_SPEED * 1, HARD_SPEED * 1)
+        time.sleep(0.10)
+
+
+def hold_robot_right(direction):  #Keeping robot to the right
 
     iterations = 2
     
@@ -115,16 +135,14 @@ while not motor_serial.shutdown_now :
        dist_2 = motor_serial.get_dist_2()
        
        if dist_1 < STOP_DISTANCE or dist_2 < STOP_DISTANCE:
-         stop_robot(1)
          drive_robot(BACKWARDS, 0.5)
-         turn_robot_90_angle(1)
-         turn_robot_90_angle(1)
+         turn_robot_90_angle(-1)
+         turn_robot_90_angle(-1)
          drive_robot(FORWARDS, 0.5)
          dist_1 = motor_serial.get_dist_1()
          dist_2 = motor_serial.get_dist_2()
          
          if dist_1 < STOP_DISTANCE or dist_2 < STOP_DISTANCE:
-           stop_robot(1)
            drive_robot(BACKWARDS, 0.5)
            turn_robot_90_angle(-1)
         
@@ -136,14 +154,20 @@ while not motor_serial.shutdown_now :
     if dist_3 < CORRECT_DISTANCE or dist_4 < CORRECT_DISTANCE: #robot correct
       drive_robot(FORWARDS, 0.1)
       
-      if dist_3 < CORRECT_DISTANCE:
+      if dist_3 < CRASH_DISTANCE:
+          correct_robot_right()
+      
+      elif dist_4 < CRASH_DISTANCE:
+          correct_robot_left()
+      
+      elif dist_3 < CORRECT_DISTANCE:
           correct_robot_right()
       
       elif dist_4 < CORRECT_DISTANCE:
           correct_robot_left()
     
-    elif dist_4 > TURN_DISTANCE: #hard right turn
-        correct_robot_hard(1)
+    elif dist_4 > TURN_DISTANCE: #Hold robot to right wall
+        hold_robot_hard(1)
         dist_1 = motor_serial.get_dist_1()
         dist_2 = motor_serial.get_dist_2()
         dist_3 = motor_serial.get_dist_3()
