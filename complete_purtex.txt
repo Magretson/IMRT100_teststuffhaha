@@ -16,6 +16,7 @@ STOP_DISTANCE = 15 #Original 25
 CORRECT_DISTANCE = 25 #ADD (recheck once turn code added in, might be too low?)
 CRASH_DISTANCE = 15 #For hard correcting
 TURN_DISTANCE = 80 #Change if too low
+CHECK_DISTANCE = 25 #checking after turning slightly higher due to reversing
 
 def stop_robot(duration):
 
@@ -134,7 +135,7 @@ while not motor_serial.shutdown_now :
        dist_1 = motor_serial.get_dist_1()
        dist_2 = motor_serial.get_dist_2()
        
-       if dist_1 < STOP_DISTANCE or dist_2 < STOP_DISTANCE:
+       if dist_1 < CHECK_DISTANCE or dist_2 < CHECK_DISTANCE:
          drive_robot(BACKWARDS, 0.5)
          turn_robot_90_angle(-1)
          turn_robot_90_angle(-1)
@@ -142,7 +143,7 @@ while not motor_serial.shutdown_now :
          dist_1 = motor_serial.get_dist_1()
          dist_2 = motor_serial.get_dist_2()
          
-         if dist_1 < STOP_DISTANCE or dist_2 < STOP_DISTANCE:
+         if dist_1 < CHECK_DISTANCE or dist_2 < CHECK_DISTANCE:
            drive_robot(BACKWARDS, 0.5)
            turn_robot_90_angle(-1)
         
