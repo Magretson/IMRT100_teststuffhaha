@@ -65,7 +65,7 @@ def correct_robot_left():  #ADD works and right direction
         motor_serial.send_command(TURNING_SPEED * 1, CORRECTING_SPEED * 1)
         time.sleep(0.10)
         
-def correct_robot_right():  #HARD correct right
+def hard_robot_right():  #HARD correct right
 
     direction = 1
     iterations = 2
@@ -74,7 +74,7 @@ def correct_robot_right():  #HARD correct right
         motor_serial.send_command(HARD_SPEED * 1, TURNING_SPEED * 1)
         time.sleep(0.10)
 
-def correct_robot_left():  #HARD correct left
+def hard_robot_left():  #HARD correct left
 
     direction = 1
     iterations = 2
@@ -155,10 +155,10 @@ while not motor_serial.shutdown_now :
       drive_robot(FORWARDS, 0.1)
       
       if dist_3 < CRASH_DISTANCE:
-          correct_robot_right()
+          hard_robot_right()
       
       elif dist_4 < CRASH_DISTANCE:
-          correct_robot_left()
+          hard_robot_left()
       
       elif dist_3 < CORRECT_DISTANCE:
           correct_robot_right()
@@ -167,7 +167,7 @@ while not motor_serial.shutdown_now :
           correct_robot_left()
     
     elif dist_4 > TURN_DISTANCE: #Hold robot to right wall
-        hold_robot_hard(1)
+        hold_robot_right(1)
         dist_1 = motor_serial.get_dist_1()
         dist_2 = motor_serial.get_dist_2()
         dist_3 = motor_serial.get_dist_3()
