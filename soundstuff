@@ -1,0 +1,58 @@
+import pygame
+import random
+
+def turn_robot_dance(direction): #small dance code
+
+    iterations = (5)
+    
+    for i in range(iterations):
+        motor_serial.send_command(CORRECTING_SPEED * direction, -CORRECTING_SPEED * direction)
+        time.sleep(0.10)
+
+def turn_robot_360(direction): #360 dance code
+
+    iterations = (60)
+    
+    for i in range(iterations):
+        motor_serial.send_command(CORRECTING_SPEED * direction, -CORRECTING_SPEED * direction)
+        time.sleep(0.10)
+
+sound_1 = pygame.mixer.Sound('/home/student/Music/sound_1.wav')
+sound_2 = pygame.mixer.Sound('/home/student/Music/sound_2.wav')
+sound_3 = pygame.mixer.Sound('/home/student/Music/sound_3.wav')
+sound_4 = pygame.mixer.Sound('/home/student/Music/sound_4.wav')
+walle_sounds = [sound_1, sound_2, sound_3, sound_4]
+
+
+random_sound = random.choice(walle_sounds)
+playing = random_sound.play()
+while playing.get_busy():
+  pygame.time.delay(50)
+
+  
+
+
+
+dance = "y"
+shut_down = "n"
+user_ask = input("Victory dance?")
+
+if user_ask == dance:
+  pygame.mixer.pre_init(44100, -16, 2, 2048)
+  pygame.init()
+  sound_victory = pygame.mixer.Sound('/home/student/Music/victory.mp3')
+  sound_victory.play()
+  time.sleep(4)
+  for i in range(4):
+    turn_robot_dance(1)
+    turn_robot_dance(-1)
+  turn_robot_360(1)
+
+elif user_ask == shut_down:
+  print("Buzzkill...")
+
+else:
+  print("Error, shutting down.")
+
+
+
