@@ -12,11 +12,13 @@ DRIVING_SPEED = 100
 TURNING_SPEED = 100
 HARD_SPEED = 200
 CORRECTING_SPEED = 150 #ADD (150 good speed)
+HALF_SPEED = 50
 STOP_DISTANCE = 15 #Original 25
 CORRECT_DISTANCE = 25 #ADD (recheck once turn code added in, might be too low?)
 CRASH_DISTANCE = 15 #For hard correcting
 TURN_DISTANCE = 80 #Change if too low
 CHECK_DISTANCE = 25 #checking after turning slightly higher due to reversing
+WALL_DISTANCE = 5 #for getting out of the wall
 
 def stop_robot(duration):
 
@@ -39,11 +41,19 @@ def drive_robot(direction, duration):
 
 
 
-def turn_robot_90_angle(direction): #90turn, 20 for low batterie
+def turn_robot_90_angle(direction): #90turn, 20 for low batterie, 16 OK
 
-    iterations = (16)
+    iterations = (15)
     
     for i in range(iterations):
+        motor_serial.send_command(TURNING_SPEED * direction, -TURNING_SPEED * direction)
+        time.sleep(0.10)
+        
+def turn_robot_small_angle(direction): #get it away from wall
+    
+    iteration = (5)
+    
+    for i in range(iteration):
         motor_serial.send_command(TURNING_SPEED * direction, -TURNING_SPEED * direction)
         time.sleep(0.10)
 
@@ -81,7 +91,7 @@ def hard_robot_left():  #HARD correct left
     iterations = 2
     
     for i in range(iterations):
-        motor_serial.send_command(TURNING_SPEED * 1, HARD_SPEED * 1)
+        motor_serial.send_command(HALF_SPEED * 1, HARD_SPEED * 1)
         time.sleep(0.10)
 
 
@@ -153,17 +163,23 @@ while not motor_serial.shutdown_now :
     if dist_3 < CORRECT_DISTANCE or dist_4 < CORRECT_DISTANCE: #robot correct
       drive_robot(FORWARDS, 0.1)
       
-      if dist_3 < CRASH_DISTANCE:
-          hard_robot_right()
+      if dist_4 < WALL_DISTANCE:
+          turn_robot_small_angle(-1)
+          
+      elif dist_3 < WALL_DISTANCE:
+          turn_robot_small_angle(1)
       
       elif dist_4 < CRASH_DISTANCE:
           hard_robot_left()
       
-      elif dist_3 < CORRECT_DISTANCE:
-          correct_robot_right()
+      elif dist_3 < CRASH_DISTANCE:
+          hard_robot_right()
       
       elif dist_4 < CORRECT_DISTANCE:
           correct_robot_left()
+      
+      elif dist_3 < CORRECT_DISTANCE:
+          correct_robot_right()
     
     elif dist_4 > TURN_DISTANCE: #Hold robot to right wall
         hold_robot_right(1)
